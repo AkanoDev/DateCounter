@@ -2,8 +2,6 @@ import "./styles.css";
 import { useState } from "react";
 
 export default function App() {
-  const [isZero, setisZero] = useState(0);
-
   return (
     <div className="App">
       <Counter />
@@ -15,20 +13,40 @@ function Counter() {
   const [counter, setCounter] = useState(0);
   const [step, setStep] = useState(1);
 
+  function handleReset() {
+    setCounter(0);
+    setStep(1);
+  }
+
   const date = new Date("november 14 2023");
   date.setDate(date.getDate() + counter);
 
   return (
     <div className="counter">
       <div>
-        <button onClick={() => setStep((step) => step - 1)}> - </button>
-        <span>Step:{step}</span>
-        <button onClick={() => setStep((step) => step + 1)}> + </button>
+        <input
+          type="range"
+          min="0"
+          max="10"
+          value={step}
+          onChange={(e) => setStep(Number(e.target.value))}
+        />
+        <span>{step}</span>
       </div>
-      <button onClick={() => setCounter((counter) => counter - step)}>-</button>
-      <span>Count: {counter}</span>
-      <button onClick={() => setCounter((counter) => counter + step)}>+</button>
+      <div>
+        <button onClick={() => setCounter((counter) => counter - step)}>
+          -
+        </button>
 
+        <input
+          type="text"
+          value={counter}
+          onChange={(e) => setCounter(Number(e.target.value))}
+        />
+        <button onClick={() => setCounter((counter) => counter + step)}>
+          +
+        </button>
+      </div>
       <p>
         <span>
           {counter === 0
@@ -39,6 +57,14 @@ function Counter() {
         </span>
         <span>{date.toDateString()}</span>
       </p>
+
+      {counter !== 0 ? (
+        <div>
+          <button onClick={handleReset}>Restart</button>
+        </div>
+      ) : (
+        ""
+      )}
     </div>
   );
 }
